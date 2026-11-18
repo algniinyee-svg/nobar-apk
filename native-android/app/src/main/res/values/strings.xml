@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Nobar</string>
+    <string name="nobar_base_url">https://nobar-d2bd.roarai.app</string>
+</resources>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nobar">
+<link rel="apple-touch-icon" href="/icon-192.png"><link rel="manifest" href="/manifest.json">
+<title>Nobar</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font:15px/1.4 system-ui,-apple-system,Roboto,sans-serif;color:#f3f6ff;background:#05070c;overflow:hidden;overscroll-behavior:none;
+padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
+@keyframes bob{50%{transform:translateY(-6px)}}
+html,body,#join,#room{height:100dvh}
+input,button{font:inherit;border-radius:999px;padding:12px 16px;outline:none}
+input{font-size:16px;min-height:46px;-webkit-appearance:none;appearance:none}
+button{cursor:pointer;font-weight:600;font-size:15px;min-height:36px}
+.lnk{padding:4px 8px;font-size:14px;min-height:0}
+#hi{margin:0;color:#9aa6c2;text-align:left}#hi b{color:#f3f6ff}
+#join{display:flex;flex-direction:column;align-items:center;padding:20px;text-align:center}
+.hero{flex:1;width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.logo{width:92px;height:92px;display:grid;place-items:center;margin-bottom:12px;animation:bob 6s ease-in-out infinite}
+.logo svg{width:50px;height:50px}
+h1{font-size:46px;margin:0}
+.sub{color:#9aa6c2;margin:6px 0 0}
+.card{width:100%;padding:20px;gap:12px;margin-top:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.chips span{font-size:12px;padding:6px 12px;border-radius:999px}
+#ioshint{display:none;font-size:12px;color:#9aa6c2;margin:12px 0 0}
+footer{padding:10px 0 6px;font-size:12px;color:#9aa6c2;letter-spacing:.3px}footer b{color:#f3f6ff}
+#room{display:none;flex-direction:column;gap:10px;padding:10px;max-width:640px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;gap:8px}
+.tl{display:flex;align-items:center;gap:10px;min-width:0}.tl>div{line-height:1.25;min-width:0}.tl .badge{display:block}
+#leave{padding:7px 12px;font-size:13px}
+.top b{letter-spacing:2px}.badge{font-size:12px}
+#stage{position:relative;aspect-ratio:16/9;background:#000;border-radius:28px;overflow:hidden}
+#stage>*{position:absolute;inset:0;width:100%;height:100%;border:0}
+#empty{display:flex;align-items:center;justify-content:center;color:#9aa6c2;text-align:center;padding:16px}
+.ctl{display:flex;gap:8px;align-items:center;padding:8px 10px}
+.ctl input[type=range]{flex:1}
+.row{display:flex;gap:8px;padding:0 2px}.row input{flex:1;min-width:0}
+#prop{display:none;padding:10px 14px;align-items:center;gap:8px;justify-content:space-between}
+#chat{flex:1;min-height:0;display:flex;flex-direction:column;padding:10px}
+#msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.m{max-width:85%;padding:7px 12px;border-radius:18px;word-break:break-word}
+.m small{display:block;font-size:11px}.m.me{align-self:flex-end}
+.m.sys{align-self:center;background:none;border:0;box-shadow:none;color:#9aa6c2;font-size:12px}
+#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);padding:8px 16px;border-radius:999px;display:none;z-index:99;max-width:90vw;text-align:center}
+#stage>#unm{display:none;z-index:5;width:auto;height:auto;inset:auto auto 10px 50%;transform:translateX(-50%);padding:8px 14px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<script src="glass.js?v=8"></script><link rel="stylesheet" href="/css/tokens.css?v=7"><link rel="stylesheet" href="/css/glass.css?v=8">
+</head><body>
+<div class="bg"></div><div id="toast"></div>
+<div id="join"><section class="nb-page on" id="page-beranda"><div class="hero">
+<div class="logo glass"><svg viewBox="0 0 64 64"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9be7ff"/><stop offset="1" stop-color="#7fd6ff"/></linearGradient></defs><circle cx="32" cy="32" r="29" fill="none" stroke="url(#lg)" stroke-width="3"/><path d="M26 19l21 13-21 13z" fill="url(#lg)"/></svg></div>
+<h1>Nobar</h1><p class="sub">Nonton bareng, ngobrol bareng.<br>Satu room untuk 8 orang.</p>
+<div class="glass card" id="acard" style="display:none">
+<input id="au" placeholder="Username" maxlength="16" autocomplete="username" autocapitalize="none" autocorrect="off">
+<input id="ap" type="password" placeholder="Password" maxlength="64" autocomplete="current-password">
+<button class="pri" id="ab">Masuk</button><button class="lnk" id="at">Belum punya akun? Daftar</button><button class="lnk" id="gt">Masuk sebagai tamu (tanpa akun)</button></div>
+<div class="glass card" id="gcard" style="display:none">
+<p style="margin:0;color:#9aa6c2;text-align:left">Masuk cepat tanpa akun, cocok kalau kamu diundang teman.</p>
+<input id="gn" placeholder="Nama panggilan" maxlength="16" autocomplete="off">
+<button class="pri" id="gb">Lanjut sebagai tamu</button>
+<p class="badge" style="margin:0;text-align:left">Tamu tidak bisa memakai push, foto profil, jadwal, dan lencana.</p>
+<button class="lnk" id="gback">Sudah punya akun? Masuk</button></div>
+<div class="glass card" id="jcard" style="display:none">
+<p id="hi">Halo, <b id="un"></b> · <button class="lnk" id="lo">Ganti akun</button></p>
+<input id="name" placeholder="Nama kamu" maxlength="16" autocomplete="off">
+<input id="code" placeholder="Kode room" maxlength="12" autocapitalize="characters" autocomplete="off">
+<button class="pri" id="go">Masuk room</button></div>
+<div class="chips"><span>▶ Sinkron</span><span>💬 Chat</span><span>🎤 Voice</span><span>📷 Video</span></div>
+<p id="ioshint">Di iPhone: ketuk tombol Bagikan lalu pilih “Tambah ke Layar Utama”.</p>
+</div><footer>Dibuat oleh <b>Algani Hamid</b><br><a href="https://wa.me/6281269751509" target="_blank" rel="noopener" style="color:#7fd6ff;text-decoration:none">💬 Hubungi via WhatsApp</a></footer></section>
+<section class="nb-page" id="page-jadwal"><div class="nb-page-head"><h2>Jadwal</h2><p>Atur nobar dan lihat jadwal mendatang.</p></div><div class="nb-page-body" id="page-jadwal-body"></div></section>
+<section class="nb-page" id="page-peringkat"><div class="nb-page-head"><h2>Peringkat</h2><p>Statistik, lencana, dan penonton paling rajin.</p></div><div class="nb-page-body" id="page-peringkat-body"></div></section>
+<section class="nb-page" id="page-profil"><div class="nb-page-head"><h2>Profil</h2><p>Akun, foto, wallpaper, dan notifikasi.</p></div><div class="nb-page-body" id="page-profil-body"></div></section>
+<section class="nb-page" id="page-tema"><div class="nb-page-head"><h2>Tema</h2><p>Pilih warna aksen aplikasi.</p></div><div class="nb-page-body" id="page-tema-body"></div></section>
+</div>
+<div id="room">
+<div class="glass top"><div class="tl"><button id="leave">Keluar</button><div><b id="rc"></b><span class="badge" id="info"></span></div></div><button id="share" style="padding:6px 12px">Salin link</button></div>
+<div id="stage"><div id="empty">Belum ada video. Tempel link YouTube atau video langsung (.mp4) di bawah.</div></div>
+<div class="glass ctl"><button id="pp" style="width:46px;padding:10px 0">▶</button><input type="range" id="seek" min="0" max="1000" value="0"><span class="badge" id="tm">0:00</span></div>
+<div class="row"><input id="url" placeholder="Link YouTube / .mp4" autocomplete="off"><button id="load" class="pri">Putar</button></div>
+<div class="glass" id="prop"><span id="pt"></span><span><button id="no" style="padding:8px 12px">Tolak</button> <button id="yes" class="pri" style="padding:8px 12px">Setuju</button></span></div>
+<div class="glass" id="chat"><div id="msgs"></div><div class="row"><input id="msg" placeholder="Ketik pesan…" maxlength="300" autocomplete="off"><button id="snd">Kirim</button></div></div>
+</div>
+<script src="app.js"></script><script src="rtc.js"></script><script src="extra.js"></script><script src="ios.js"></script><script src="cinema.js"></script><script src="joinreq.js"></script><script src="more.js"></script><script src="push.js"></script><script src="settings.js"></script><script src="wp.js"></script><script src="party.js"></script><script src="home.js"></script><script src="chat2.js"></script><script src="fun.js"></script><script src="ui.js"></script><script src="shell.js?v=8"></script><script src="/js/glass.js?v=8"></script></body></html>
