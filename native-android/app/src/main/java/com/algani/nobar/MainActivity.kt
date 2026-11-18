@@ -276,13 +276,13 @@ class MainActivity : ComponentActivity() {
                     if (token.isBlank()) {
                         if (showGuest) {
                             Field(guestName, { guestName = it }, "Nama panggilan")
-                            Button(onClick = { lifecycleScope.launch { runCatching { api.post("/api/guest", JSONObject().put("name", guestName)).also { setToken(it.optString("token")); displayName = it.optString("name") } }.onFailure { error = it.message ?: "Gagal masuk sebagai tamu" } } }, modifier = Modifier.fillMaxWidth()) { Text("Lanjut sebagai tamu") }
+                            Button(onClick = { lifecycleScope.launch { runCatching { api.post("/api/guest", JSONObject().put("name", guestName)).also { updateToken(it.optString("token")); displayName = it.optString("name") } }.onFailure { error = it.message ?: "Gagal masuk sebagai tamu" } } }, modifier = Modifier.fillMaxWidth()) { Text("Lanjut sebagai tamu") }
                             TextButton(onClick = { showGuest = false }) { Text("Kembali ke login") }
                         } else {
                             Text(if (register) "Buat akun" else "Masuk", color = Color.White, fontSize = 20.sp)
                             Field(username, { username = it }, "Username")
                             OutlinedTextField(password, { password = it }, modifier = Modifier.fillMaxWidth(), label = { Text("Password") }, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), singleLine = true)
-                            Button(onClick = { lifecycleScope.launch { runCatching { api.post(if (register) "/api/register" else "/api/login", JSONObject().put("username", username).put("password", password)).also { setToken(it.optString("token")); displayName = it.optString("user"); error = if (it.has("recovery")) "Simpan kode pemulihan: ${it.optString("recovery")}" else "" } }.onFailure { error = it.message ?: "Login gagal" } } }, modifier = Modifier.fillMaxWidth()) { Text(if (register) "Daftar" else "Masuk") }
+                            Button(onClick = { lifecycleScope.launch { runCatching { api.post(if (register) "/api/register" else "/api/login", JSONObject().put("username", username).put("password", password)).also { updateToken(it.optString("token")); displayName = it.optString("user"); error = if (it.has("recovery")) "Simpan kode pemulihan: ${it.optString("recovery")}" else "" } }.onFailure { error = it.message ?: "Login gagal" } } }, modifier = Modifier.fillMaxWidth()) { Text(if (register) "Daftar" else "Masuk") }
                             TextButton(onClick = { register = !register }) { Text(if (register) "Sudah punya akun? Masuk" else "Belum punya akun? Daftar") }
                             TextButton(onClick = { showGuest = true }) { Text("Masuk sebagai tamu") }
                         }
@@ -291,7 +291,7 @@ class MainActivity : ComponentActivity() {
                         Field(room, { room = it.uppercase().take(12); pendingInviteRoom = "" }, "Kode room")
                         OutlinedTextField(roomPassword, { roomPassword = it }, modifier = Modifier.fillMaxWidth(), label = { Text("Password room (opsional)") }, singleLine = true)
                         Button(onClick = { joinRoom(room, roomPassword) }, modifier = Modifier.fillMaxWidth(), enabled = room.isNotBlank()) { Text("Masuk room") }
-                        TextButton(onClick = { setToken(""); displayName = "" }) { Text("Ganti akun") }
+                        TextButton(onClick = { updateToken(""); displayName = "" }) { Text("Ganti akun") }
                     }
                     if (error.isNotBlank()) Text(error, color = Color(0xFFFF8A80), fontSize = 12.sp)
                 }
