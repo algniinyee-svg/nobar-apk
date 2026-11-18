@@ -1,11 +1,10 @@
 package com.algani.nobar
 
 import android.os.Bundle
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.content.Intent
 import android.webkit.WebView
-import android.graphics.BitmapFactory
-import android.content.Intent
 import android.webkit.WebViewClient
 import android.webkit.WebChromeClient
 import android.webkit.JavascriptInterface
@@ -236,7 +235,7 @@ class MainActivity : ComponentActivity() {
                                     val raw = contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: error("File tidak bisa dibaca")
                                     val bitmap = BitmapFactory.decodeByteArray(raw, 0, raw.size) ?: error("Format gambar tidak didukung")
                                     val scale = minOf(1f, 1600f / maxOf(bitmap.width, bitmap.height))
-                                    val resized = if (scale < 1f) BitmapFactory.createScaledBitmap(bitmap, (bitmap.width * scale).toInt(), (bitmap.height * scale).toInt(), true) else bitmap
+                                    val resized = if (scale < 1f) Bitmap.createScaledBitmap(bitmap, (bitmap.width * scale).toInt(), (bitmap.height * scale).toInt(), true) else bitmap
                                     var bytes = byteArrayOf()
                                     for (quality in listOf(78, 65, 52, 40, 30)) {
                                         val out = java.io.ByteArrayOutputStream()
