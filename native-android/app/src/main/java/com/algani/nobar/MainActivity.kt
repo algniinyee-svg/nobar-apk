@@ -166,7 +166,7 @@ class MainActivity : ComponentActivity() {
         if (token.isNotBlank()) lifecycleScope.launch {
             runCatching { api.me(token) }.onSuccess { me ->
                 displayName = me.optString("user").ifBlank { me.optString("guest") }
-                if (displayName.isBlank()) setToken("")
+                if (displayName.isBlank()) updateToken("")
                 else {
                     runCatching { FcmRegistrar.register(this@MainActivity, token) }
                     startInbox()
@@ -177,7 +177,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun setToken(value: String) {
+    private fun updateToken(value: String) {
         val previous = token
         token = value
         getSharedPreferences("nobar_session", MODE_PRIVATE).edit().putString("token", value).apply()
