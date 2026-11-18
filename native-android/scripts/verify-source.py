@@ -51,7 +51,7 @@ from pathlib import Path
 rtc = Path("app/src/main/java/com/algani/nobar/media/NativeCallEngine.kt").read_text()
 for marker in ["startMedia", "updateMembers", "handleSignal", "muteByHost", "createOffer", "createAnswer", "addIceCandidate"]:
     assert marker in rtc, f"Missing WebRTC engine feature: {marker}"
-assert 'org.webrtc:google-webrtc' in Path("app/build.gradle.kts").read_text()
+assert "io.github.webrtc-sdk:android:150.7871.04" in Path("app/build.gradle.kts").read_text()
 print("Native WebRTC source checks: 7 passed")
 
 
